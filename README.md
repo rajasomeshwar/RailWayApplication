@@ -281,7 +281,7 @@ A Spring Boot-based Railway Management System (similar to IRCTC) that allows use
          "availableSeats": 75,
          "arrivalTime": "2025-05-10T20:00:00"
        }
-       // ... more train objects
+ 
      ]
      ```
 

@@ -1,0 +1,11 @@
+package com.exception;
+
+import com.controller.TokenExpiredLoginAgainException;
+
+public class ConcurrentBookingException extends RuntimeException {
+    public ConcurrentBookingException(String message) {
+        super(message);
+    }
+}
+
+

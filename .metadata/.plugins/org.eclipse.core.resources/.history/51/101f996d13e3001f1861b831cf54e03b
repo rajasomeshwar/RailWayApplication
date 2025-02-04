@@ -1,0 +1,6 @@
+package com.dto;
+
+public class TrainUpdateRequest {
+  private int trainNumber ; 
+  private int newAvailable ; 
+}

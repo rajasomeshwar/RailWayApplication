@@ -1,0 +1,14 @@
+package com.service;
+
+import org.springframework.http.ResponseEntity;
+
+import com.dto.TrainRequest;
+
+public class TrainService {
+
+	public ResponseEntity<?> addTrain(TrainRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

@@ -1,0 +1,57 @@
+package com.exception;
+
+import java.time.LocalDateTime;
+
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+
+
+@ControllerAdvice
+public class CustomsizedResponseEntityExceptionHandlera extends ResponseEntityExceptionHandler {
+ 
+   @ExceptionHandler(AlreadyVertifiedEmailException.class)
+   public final ResponseEntity<ErrorDetails> HandleAlreadyVertifiedEmailException(Exception ex,WebRequest request)
+   {
+	   var error=new ErrorDetails(LocalDateTime.now(),ex.getMessage(),request.getDescription(false));
+	   return new ResponseEntity<ErrorDetails>(error,HttpStatus.NOT_FOUND);
+   }
+   //@ExceptionHandler(TokenInvalidException.class)
+   public final ResponseEntity<ErrorDetails> HandleTokenInvalidException(Exception ex,WebRequest request)
+   {
+	   var error=new ErrorDetails(LocalDateTime.now(),ex.getMessage(),request.getDescription(false));
+	   return new ResponseEntity<ErrorDetails>(error,HttpStatus.NOT_FOUND);
+   }
+ @ExceptionHandler(InvalidNameException.class)
+   public final ResponseEntity<ErrorDetails> HandleNameException(Exception ex,WebRequest request)
+   {
+	   var error=new ErrorDetails(LocalDateTime.now(),ex.getMessage(),request.getDescription(false));
+	   return new ResponseEntity<ErrorDetails>(error,HttpStatus.NOT_FOUND);
+   }
+   
+  // @ExceptionHandler(MailNotFoundException.class)
+   public final ResponseEntity<ErrorDetails> HandleMailNotFoundException(Exception ex,WebRequest request)
+   {
+	   var error=new ErrorDetails(LocalDateTime.now(),ex.getMessage(),request.getDescription(false));
+	   return new ResponseEntity<ErrorDetails>(error,HttpStatus.NOT_FOUND);
+   }
+   @ExceptionHandler(InvalidCodeException.class)
+   public final ResponseEntity<ErrorDetails> handleInvalidCodeException(Exception ex,WebRequest request)
+   {
+	   var error=new ErrorDetails(LocalDateTime.now(),ex.getMessage(),request.getDescription(false));
+	   return new ResponseEntity<ErrorDetails>(error,HttpStatus.NOT_FOUND);
+   }
+   //@ExceptionHandler(NotCreatedByEmailException.class)
+   public final ResponseEntity<ErrorDetails> handleNotCreatedByEmailException(Exception ex,WebRequest request)
+   {
+	   var error=new ErrorDetails(LocalDateTime.now(),ex.getMessage(),request.getDescription(false));
+	   return new ResponseEntity<ErrorDetails>(error,HttpStatus.NOT_FOUND);
+   }
+   
+}

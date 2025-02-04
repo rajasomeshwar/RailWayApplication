@@ -1,0 +1,13 @@
+package com.controller;
+
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class AuthController {
+  
+	
+	@Get("test")
+	public String Test() {
+		return "okay";
+	}
+}

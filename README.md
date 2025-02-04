@@ -116,10 +116,9 @@ A Spring Boot-based Railway Management System (similar to IRCTC) that allows use
          "destination": "Delhi",
          "totalSeats": 100,
          "availableSeats": 50,
-         "departureTime": "2025-05-10T08:00:00",
          "arrivalTime": "2025-05-10T20:00:00"
        }
-       // ... more train objects
+
      ]
      ```
 
@@ -201,7 +200,6 @@ A Spring Boot-based Railway Management System (similar to IRCTC) that allows use
          "train": { /* train details */ },
          "status": "Confirmed"
        }
-       // ... additional bookings
      ]
      ```
 
@@ -229,7 +227,6 @@ A Spring Boot-based Railway Management System (similar to IRCTC) that allows use
        "source": "Mumbai",
        "destination": "Delhi",
        "totalSeats": 100,
-       "departureTime": "2025-05-10T08:00:00",
        "arrivalTime": "2025-05-10T20:00:00"
      }
      ```
@@ -242,7 +239,6 @@ A Spring Boot-based Railway Management System (similar to IRCTC) that allows use
        "destination": "Delhi",
        "totalSeats": 100,
        "availableSeats": 100,
-       "departureTime": "2025-05-10T08:00:00",
        "arrivalTime": "2025-05-10T20:00:00"
      }
      ```
@@ -283,7 +279,6 @@ A Spring Boot-based Railway Management System (similar to IRCTC) that allows use
          "destination": "Delhi",
          "totalSeats": 100,
          "availableSeats": 75,
-         "departureTime": "2025-05-10T08:00:00",
          "arrivalTime": "2025-05-10T20:00:00"
        }
        // ... more train objects

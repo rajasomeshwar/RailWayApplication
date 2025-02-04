@@ -1,6 +1,0 @@
-public class DuplicateTrainException extends RuntimeException {
-    public InvalidNameException(String message)
-    {
-   	 super(message);
-    }
-}

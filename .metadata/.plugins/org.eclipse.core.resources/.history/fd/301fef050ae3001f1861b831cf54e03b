@@ -1,5 +1,0 @@
-public class InsuffentSeatsAvailableException extends RuntimeException {
-    public InsuffentSeatsAvailable(String message) {
-        super(message);
-    }
-}

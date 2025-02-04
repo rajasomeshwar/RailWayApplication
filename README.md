@@ -6,7 +6,7 @@ A Spring Boot-based Railway Management System (similar to IRCTC) that allows use
 - **Search Trains:** Users can search for available trains between two stations.
 - **Book Seats:** Users can book seats on a train if seats are available. The booking mechanism is designed to handle concurrency (i.e., only one user can book a particular seat when multiple users attempt to book simultaneously).
 - **View Booking Details:** Users can retrieve details of their bookings.
-- **Admin Functionality:** Admin users can add new trains, update train details, and list all trains. Admin endpoints are additionally secured using an API key.
+- **Admin Functionality:** Admin users (default username: **admin**) can add new trains, update train details, and list all trains. Admin endpoints are additionally secured using an API key.
 
 > **Note:** This project uses MySQL as the database. Ensure your database is set up correctly before running the application.
 
@@ -63,18 +63,17 @@ A Spring Boot-based Railway Management System (similar to IRCTC) that allows use
    - **Request Body:**
      ```json
      {
-       "username": "john_doe",
-       "password": "password123",
-       "role": "USER"
+       "username": "johndoeu",
+       "password": "securePassword123",
+       
      }
      ```
    - **Response:**  
-     Success message:  
      ```
-     "User registered successfully"
+     "Account Created !"
      ```
-   - **Error:**  
-     An error message if the user already exists or validation fails.
+   - **Notes:**  
+     Registration does not require a JWT token.
 
 2. **Login User**
 
@@ -82,43 +81,62 @@ A Spring Boot-based Railway Management System (similar to IRCTC) that allows use
    - **Request Body:**
      ```json
      {
-       "username": "john_doe",
-       "password": "password123"
+       "username": "johndoe",
+       "password": "securePassword123"
      }
      ```
    - **Response:**
      ```json
      {
        "user": {
-         "username": "john_doe",
-         "role": "USER"
+         "userId": 2,
+         "username": "johndoe",
+         "enabled": true,
+         "accountNonLocked": true,
+         "credentialsNonExpired": true,
+         "accountNonExpired": true
        },
-       "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+       "jwt": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiam9obmRvZSIsImV4cCI6MTczODY5NDQyMywiaWF0IjoxNzM4Njg5MDIzLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXX0.hpAmjKuAdpwVYuylLG7eryhwVTMAAjL4UrrhcT6mP5ITInYHkdoq1IP79toyChYydIsoVBpR3dslpsi3-h_AppA8b9z_srubXMdbeJAAyKoIp5hF2_FSwSZ2TNRTv2rv24i_a-yKTxk2HyPmGVCCzdwdAs65Nz1teCoHbX2UBeQnZ-eFt1ZGVm2fy9OmI4sEj0Q4PR3Ss6ysqzgES2S-ehypzGoiJWxCCUgcCkkEEpdEvOosp6r9-wJzD1XCqFlEuFqhy_-CIXJemXZu98LAUGbDkMzyoWuhdShoP2S83nhc5_TUQX9GWarXCeA3N1KOAKFGUp3RAH93YDFXeY0x-g"
      }
      ```
    - **Usage:**  
-     The returned JWT must be included in the `Authorization` header (e.g., `Authorization: Bearer <JWT_TOKEN>`) for subsequent user API calls.
+     The returned JWT must be included in the `Authorization` header (e.g., `Authorization: Bearer <JWT_TOKEN>`) for all subsequent user API calls.
 
 3. **Get Seat Availability (Search Trains)**
 
    - **URL:** `GET /api/user/trains?source=Mumbai&destination=Delhi`
-   - **Query Parameters:**  
-     - `source`: Starting station  
+   - **Query Parameters:**
+     - `source`: Starting station
      - `destination`: Destination station
+   - **Headers:**
+     ```
+     Authorization: Bearer <USER_JWT_TOKEN>
+     ```
    - **Response:**
      ```json
      [
        {
          "id": 1,
          "trainNumber": 12345,
-         "trainName": "Express Line",
+         "trainName": "Express Train",
          "source": "Mumbai",
          "destination": "Delhi",
-         "totalSeats": 100,
-         "availableSeats": 50,
-         "arrivalTime": "2025-05-10T20:00:00"
+         "totalSeats": 500,
+         "availableSeats": 482,
+         "arrivalTime": "2024-02-04T18:00:00",
+         "version": 9
+       },
+       {
+         "id": 2,
+         "trainNumber": 12349,
+         "trainName": "Express Train",
+         "source": "Mumbai",
+         "destination": "Delhi",
+         "totalSeats": 500,
+         "availableSeats": 498,
+         "arrivalTime": "2024-02-04T18:00:00",
+         "version": 1
        }
-
      ]
      ```
 
@@ -127,58 +145,78 @@ A Spring Boot-based Railway Management System (similar to IRCTC) that allows use
    - **URL:** `POST /api/userx/bookings`
    - **Headers:**
      ```
-     Authorization: Bearer <JWT_TOKEN>
+     Authorization: Bearer <USER_JWT_TOKEN>
      ```
    - **Request Body:**
      ```json
      {
        "trainId": 1,
-       "requiredSeats": 1
+       "requiredSeats": 2
      }
      ```
-   - **Response:**
+   - **Response:**  
+     (Sample response)
      ```json
      {
-       "bookingId": 5,
-       "user": {
-         "username": "john_doe"
-       },
+       "id": 10,
        "train": {
          "id": 1,
          "trainNumber": 12345,
-         "trainName": "Express Line",
+         "trainName": "Express Train",
          "source": "Mumbai",
-         "destination": "Delhi"
+         "destination": "Delhi",
+         "totalSeats": 500,
+         "availableSeats": 482,
+         "arrivalTime": "2024-02-04T18:00:00",
+         "version": 9
        },
-       "status": "Confirmed"
+       "user": {
+         "userId": 2,
+         "username": "johndoe",
+         "enabled": true,
+         "accountNonLocked": true,
+         "credentialsNonExpired": true,
+         "accountNonExpired": true
+       },
+       "bookingTime": "2025-02-04T22:32:58.1179446"
      }
      ```
    - **Error Handling:**  
      - If seats are unavailable, returns `"No seats available"`.
-     - If JWT is invalid or user not found, throws an exception (e.g., `TokenExpiredLoginAgainException`).
+     - If JWT is invalid or the user is not found, an exception such as `TokenExpiredLoginAgainException` is thrown.
 
 5. **Get Specific Booking Details**
 
    - **URL:** `GET /api/userx/bookings/{bookingId}`
    - **Headers:**
      ```
-     Authorization: Bearer <JWT_TOKEN>
+     Authorization: Bearer <USER_JWT_TOKEN>
      ```
-   - **Response:**
+   - **Response:**  
+     (Sample response)
      ```json
      {
-       "bookingId": 5,
-       "user": {
-         "username": "john_doe"
-       },
+       "id": 10,
        "train": {
          "id": 1,
          "trainNumber": 12345,
-         "trainName": "Express Line",
+         "trainName": "Express Train",
          "source": "Mumbai",
-         "destination": "Delhi"
+         "destination": "Delhi",
+         "totalSeats": 500,
+         "availableSeats": 482,
+         "arrivalTime": "2024-02-04T18:00:00",
+         "version": 9
        },
-       "status": "Confirmed"
+       "user": {
+         "userId": 2,
+         "username": "johndoe",
+         "enabled": true,
+         "accountNonLocked": true,
+         "credentialsNonExpired": true,
+         "accountNonExpired": true
+       },
+       "bookingTime": "2025-02-04T22:32:58.1179446"
      }
      ```
 
@@ -187,19 +225,36 @@ A Spring Boot-based Railway Management System (similar to IRCTC) that allows use
    - **URL:** `GET /api/userx/bookingsAll`
    - **Headers:**
      ```
-     Authorization: Bearer <JWT_TOKEN>
+     Authorization: Bearer <USER_JWT_TOKEN>
      ```
-   - **Response:**
+   - **Response:**  
+     (Sample response)
      ```json
      [
        {
-         "bookingId": 5,
-         "user": {
-           "username": "john_doe"
+         "id": 1,
+         "train": {
+           "id": 1,
+           "trainNumber": 12345,
+           "trainName": "Express Train",
+           "source": "Mumbai",
+           "destination": "Delhi",
+           "totalSeats": 500,
+           "availableSeats": 482,
+           "arrivalTime": "2024-02-04T18:00:00",
+           "version": 9
          },
-         "train": { /* train details */ },
-         "status": "Confirmed"
+         "user": {
+           "userId": 2,
+           "username": "johndoe",
+           "enabled": true,
+           "accountNonLocked": true,
+           "credentialsNonExpired": true,
+           "accountNonExpired": true
+         },
+         "bookingTime": "2025-02-04T22:32:58.117944"
        }
+       // ... additional bookings
      ]
      ```
 
@@ -222,24 +277,33 @@ A Spring Boot-based Railway Management System (similar to IRCTC) that allows use
    - **Request Body:**
      ```json
      {
-       "trainNumber": 12345,
-       "trainName": "Express Line",
+       "trainNumber": "12345",
+       "trainName": "Express Train",
        "source": "Mumbai",
        "destination": "Delhi",
-       "totalSeats": 100,
-       "arrivalTime": "2025-05-10T20:00:00"
+       "totalSeats": 500,
+       "departureTime": "2024-02-04T10:00:00",
+       "arrivalTime": "2024-02-04T18:00:00"
      }
      ```
-   - **Response:**
+   - **Response:**  
+     (Sample response)
      ```json
      {
-       "trainNumber": 12345,
-       "trainName": "Express Line",
-       "source": "Mumbai",
-       "destination": "Delhi",
-       "totalSeats": 100,
-       "availableSeats": 100,
-       "arrivalTime": "2025-05-10T20:00:00"
+       "trainId": 1,
+       "trainDetails": {
+         "id": 1,
+         "trainNumber": "12345",
+         "trainName": "Express Train",
+         "source": "Mumbai",
+         "destination": "Delhi",
+         "totalSeats": 500,
+         "availableSeats": 500,
+         "arrivalTime": "2024-02-04T18:00:00",
+         "version": 0
+       },
+       "trainNumber": "12345",
+       "message": "Train added successfully"
      }
      ```
 
@@ -269,19 +333,19 @@ A Spring Boot-based Railway Management System (similar to IRCTC) that allows use
      Authorization: Bearer <ADMIN_JWT_TOKEN>
      API-Key: your-admin-api-key
      ```
-   - **Response:**
+   - **Response:**  
+     (Sample response)
      ```json
      [
        {
          "trainNumber": 12345,
-         "trainName": "Express Line",
+         "trainName": "Express Train",
          "source": "Mumbai",
          "destination": "Delhi",
-         "totalSeats": 100,
+         "totalSeats": 500,
          "availableSeats": 75,
-         "arrivalTime": "2025-05-10T20:00:00"
+         "arrivalTime": "2024-02-04T18:00:00"
        }
- 
      ]
      ```
 
@@ -290,11 +354,13 @@ A Spring Boot-based Railway Management System (similar to IRCTC) that allows use
 ## Exception Handling
 
 - **User Not Found / Invalid JWT:**  
-  - Throws exceptions like `TokenExpiredLoginAgainException` or a `RuntimeException` with a message such as `"User not found"` or `"Invalid JWT Token! Please login again."`
+  Throws exceptions like `TokenExpiredLoginAgainException` or a `RuntimeException` with a message such as `"User not found"` or `"Invalid JWT Token! Please login again."`
+
 - **No Seats Available:**  
-  - Throws a `RuntimeException` with the message `"No seats available"`.
+  Throws a `RuntimeException` with the message `"No seats available"`.
+
 - **Validation Errors:**  
-  - Uses Spring validation annotations (e.g., `@NotBlank`, `@Positive`) to ensure incoming requests are valid. Validation errors return detailed messages.
+  Uses Spring validation annotations (e.g., `@NotBlank`, `@Positive`) to ensure incoming requests are valid. Validation errors return detailed messages.
 
 ---
 

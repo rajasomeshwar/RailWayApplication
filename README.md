@@ -6,9 +6,9 @@ A Spring Boot-based Railway Management System (similar to IRCTC) that allows use
 - **Search Trains:** Users can search for available trains between two stations.
 - **Book Seats:** Users can book seats on a train if seats are available. The booking mechanism is designed to handle concurrency (i.e., only one user can book a particular seat when multiple users attempt to book simultaneously).
 - **View Booking Details:** Users can retrieve details of their bookings.
-- **Admin Functionality:** Admin users (default username: **admin**) can add new trains, update train details, and list all trains. Admin endpoints are additionally secured using an API key.
+- **Admin Functionality:** Admin users (default username: **admin** , password : **password** ) can add new trains, update train details, and list all trains. Admin endpoints are additionally secured using an API key.
 
-> **Note:** This project uses MySQL as the database. Ensure your database is set up correctly before running the application.
+> **Note:** This project uses MySQL as the database. Ensure your database is set up correctly before running the application. The port Number is : **8085** default 
 
 ---
 
@@ -282,7 +282,6 @@ A Spring Boot-based Railway Management System (similar to IRCTC) that allows use
        "source": "Mumbai",
        "destination": "Delhi",
        "totalSeats": 500,
-       "departureTime": "2024-02-04T10:00:00",
        "arrivalTime": "2024-02-04T18:00:00"
      }
      ```

@@ -375,5 +375,5 @@ A Spring Boot-based Railway Management System (similar to IRCTC) that allows use
 
 1. **Clone the Repository**
    ```bash
-   git clone [https://github.com/yourusername/railway-management-system.git](https://github.com/rajasomeshwar/RailWayApplication)
+   git clone https://github.com/yourusername/railway-management-system.git
    cd RailWayManagamentApplication
